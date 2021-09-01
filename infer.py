@@ -49,7 +49,7 @@ def parse_testing_args(parser):
 
 
 
-def train():
+def test():
 
     parser = argparse.ArgumentParser(description=hp.description)
     parser = parse_testing_args(parser)
@@ -116,7 +116,7 @@ def train():
         img = batch.cuda()
         outputs = model(img)
 
-        predicts = class_generate.generate_from_synthesis(outputs,None,randomize_noise=True,return_latents=True)
+        predicts = class_generate.generate_from_synthesis(outputs,None,randomize_noise=False,return_latents=True)
 
         if hp.dataset_type == 'car':
             predicts = predicts[:, :, 32:224, :]
@@ -138,4 +138,4 @@ def train():
    
 
 if __name__ == '__main__':
-    train()
+    test()
