@@ -29,7 +29,7 @@ device = torch.device("cuda:0" if torch.cuda.is_available() else "cpu")
 
 np_str_obj_array_pattern = re.compile(r'[SaUO]')
 
-
+face_pool = torch.nn.AdaptiveAvgPool2d((256, 256))
 
 def parse_testing_args(parser):
     """

@@ -30,7 +30,7 @@ device = torch.device("cuda:0" if torch.cuda.is_available() else "cpu")
 
 np_str_obj_array_pattern = re.compile(r'[SaUO]')
 
-
+face_pool = torch.nn.AdaptiveAvgPool2d((256, 256))
 
 def parse_training_args(parser):
     """
@@ -200,6 +200,8 @@ def train():
             print(f"Batch: {i}/{len(train_loader)} epoch {epoch}")
 
             img = batch.cuda()
+            if hp.resize:
+                img = face_pool(img)
             outputs = model(img)
     
             predicts = class_generate.generate_from_synthesis(outputs,None,randomize_noise=True,return_latents=True)

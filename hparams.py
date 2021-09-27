@@ -5,6 +5,7 @@ class hparams:
     output_dir = 'log/0831'
 
     img_size = 256
+    resize = True
     dataset_type = 'ffhq' # ['ffhq', 'celebahq', 'car', 'bggn']
     dataset_path = ''
 
