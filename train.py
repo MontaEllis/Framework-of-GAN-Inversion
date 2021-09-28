@@ -258,6 +258,15 @@ def train():
                     normalize=hp.norm,
                     range=hp.rangee,
                 )
+
+            with torch.no_grad():
+                utils.save_image(
+                    img,
+                    os.path.join(args.output_dir,("step-{}-origin.png").format(epoch)),
+                    nrow=hp.row,
+                    normalize=hp.norm,
+                    range=hp.rangee,
+                )
                 
     writer.close()
 
