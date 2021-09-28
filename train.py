@@ -190,8 +190,8 @@ def train():
     for epoch in range(1, epochs + 1):
         
 
-        print("epoch:"+str(epoch))
         epoch += elapsed_epochs
+        print("epoch:"+str(epoch))
 
    
         for i, batch in enumerate(train_loader):
@@ -267,7 +267,7 @@ def train():
                     normalize=hp.norm,
                     range=hp.rangee,
                 )
-                
+
     writer.close()
 
 
