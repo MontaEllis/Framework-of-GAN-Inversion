@@ -138,7 +138,7 @@ def test():
         with torch.no_grad():
             utils.save_image(
                 img,
-                os.path.join(args.output_dir,("step-{}-origin.png").format(epoch)),
+                os.path.join(args.output_dir,("step-{}-origin.png").format(i)),
                 nrow=hp.row,
                 normalize=hp.norm,
                 range=hp.rangee,
