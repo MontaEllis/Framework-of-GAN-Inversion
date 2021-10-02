@@ -29,7 +29,7 @@ class infer_face():
         #     parm.requires_grad = False
 
 
-        self.discriminator = Discriminator(256, channel_multiplier=2).to(self.device)
+        self.discriminator = Discriminator(hp.img_size, channel_multiplier=2).to(self.device)
         self.discriminator.load_state_dict(self.checkpoint["d"])
 
 
