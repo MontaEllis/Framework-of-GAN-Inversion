@@ -10,6 +10,11 @@
 * pip install git+git://github.com/lehduong/torch-warmup-lr.git
 * PyTorch1.7
 
+## Train
+### Without DDP
+`python train.py`
+### With DDP
+`python -m torch.distributed.launch --nproc_per_node=nums_gpus train.py`
 ## Done
 ### Tuning Setting
 * Apply_init
@@ -28,8 +33,9 @@
 * ID loss from [restyle-encoder](https://github.com/yuval-alaluf/restyle-encoder) and [pixel2style2pixel](https://github.com/eladrich/pixel2style2pixel)
 * Moco loss from [restyle-encoder](https://github.com/yuval-alaluf/restyle-encoder) and [pixel2style2pixel](https://github.com/eladrich/pixel2style2pixel)
 
+
 ## TODO
-- [ ] DDP
+- [*] DDP
 - [ ] More Backbones
 - [ ] Metrics
 
