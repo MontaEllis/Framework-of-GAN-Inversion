@@ -200,12 +200,12 @@ def train():
             print(f"Batch: {i}/{len(train_loader)} epoch {epoch}")
 
             img = batch.cuda()
-            if hp.resize:
-                img = face_pool(img)
+
             outputs = model(img)
     
             predicts = class_generate.generate_from_synthesis(outputs,None,randomize_noise=True,return_latents=True)
-
+            if hp.resize:
+                predicts = face_pool(predicts)
             if hp.dataset_type == 'car':
                 predicts = predicts[:, :, 32:224, :]
 

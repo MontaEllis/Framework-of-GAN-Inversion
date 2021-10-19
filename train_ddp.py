@@ -33,7 +33,7 @@ from distributed import (
     get_world_size,
 )
 from torch.utils import data
-
+from time import sleep
 device = torch.device("cuda:0" if torch.cuda.is_available() else "cpu")
 
 
@@ -205,7 +205,8 @@ def train():
     from criteria import all_loss
     criterion = all_loss.Base_Loss()
 
-    writer = SummaryWriter(args.output_dir)
+    if get_rank() == 0:
+        writer = SummaryWriter(args.output_dir)
 
 
 
@@ -224,27 +225,53 @@ def train():
     epochs = args.epochs - elapsed_epochs
     iteration = elapsed_epochs * len(train_loader)
 
+    if args.distributed:
+        model = model.module
+    else:
+        pass
+
 
     model.train()
 
+    if get_rank() == 0:
+        progress_bar = tqdm(total = args.epochs, desc = "Total progress", dynamic_ncols=True)
+        progress_bar.update(epochs)
+        interior_step_bar = tqdm(dynamic_ncols=True)
+
+
+
     for epoch in range(1, epochs + 1):
         
+        if get_rank() == 0:
+            progress_bar.set_description('Epoch %i' % epoch)
+            
+            sleep(0.1)
+            progress_bar.update(1)
+        
+            interior_step_bar.reset(total=len(train_loader))
+            interior_step_bar.set_description(f"Interior steps")
 
         epoch += elapsed_epochs
-        print("epoch:"+str(epoch))
+        # print("epoch:"+str(epoch))
 
    
         for i, batch in enumerate(train_loader):
             
+            if get_rank() == 0:
 
-            print(f"Batch: {i}/{len(train_loader)} epoch {epoch}")
+                interior_step_bar.update(1)
+            # print(f"Batch: {i}/{len(train_loader)} epoch {epoch}")
 
-            img = batch.cuda()
-            if hp.resize:
-                img = face_pool(img)
+            img = batch.cuda(non_blocking=True)
+
             outputs = model(img)
     
             predicts = class_generate.generate_from_synthesis(outputs,None,randomize_noise=True,return_latents=True)
+
+
+            if hp.resize:
+                predicts = face_pool(predicts)
+
 
             if hp.dataset_type == 'car':
                 predicts = predicts[:, :, 32:224, :]
@@ -255,14 +282,16 @@ def train():
 
             loss_all,loss_mse,loss_lpips,loss_per = criterion(img,predicts)
             ## log
-            writer.add_scalar('Refine/Loss', loss_all.item(), iteration)
-            writer.add_scalar('Refine/loss_mse', loss_mse.item(), iteration)
-            writer.add_scalar('Refine/loss_lpips', loss_lpips.item(), iteration)
-            writer.add_scalar('Refine/loss_per', loss_per.item(), iteration)
+            if get_rank() == 0:
+                writer.add_scalar('Refine/Loss', loss_all.item(), iteration)
+                writer.add_scalar('Refine/loss_mse', loss_mse.item(), iteration)
+                writer.add_scalar('Refine/loss_lpips', loss_lpips.item(), iteration)
+                writer.add_scalar('Refine/loss_per', loss_per.item(), iteration)
+                interior_step_bar.set_postfix(loss=str(loss_all.item()),lr=str(scheduler._last_lr[0]))
             loss_all.backward()
             optimizer.step()
-            print("loss:"+str(loss_all.item()))
-            print('lr:'+str(scheduler._last_lr[0]))
+            # print("loss:"+str(loss_all.item()))
+            # print('lr:'+str(scheduler._last_lr[0]))
             iteration += 1
         scheduler.step()
 
