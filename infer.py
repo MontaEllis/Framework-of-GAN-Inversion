@@ -6,7 +6,6 @@ import re
 import time
 import argparse
 import numpy as np
-from torch._six import container_abcs, string_classes, int_classes
 import torch
 from torch.utils.data import DataLoader
 from torch.utils.tensorboard import SummaryWriter
