@@ -82,7 +82,6 @@ def test():
 
 
 
-    print("load model:", args.ckpt)
     print(os.path.join(args.output_dir, args.latest_checkpoint_file))
     ckpt = torch.load(os.path.join(args.output_dir, args.latest_checkpoint_file), map_location=lambda storage, loc: storage)
 
@@ -95,7 +94,7 @@ def test():
 
     from data_function import ImageData
 
-    test_dataset = ImageData(hp.dataset_path, hp.transform['transform_test'])
+    test_dataset = ImageData(hp.dataset_path, hp.transform['transform_inference'])
     test_loader = DataLoader(test_dataset, 
                             batch_size=args.batch, 
                             shuffle=True,
