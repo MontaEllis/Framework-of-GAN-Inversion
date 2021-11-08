@@ -97,7 +97,7 @@ def test():
     test_dataset = ImageData(hp.dataset_path, hp.transform['transform_inference'])
     test_loader = DataLoader(test_dataset, 
                             batch_size=args.batch, 
-                            shuffle=True,
+                            shuffle=False,
                             pin_memory=False,
                             drop_last=True)
 
