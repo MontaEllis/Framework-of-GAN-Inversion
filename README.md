@@ -35,7 +35,7 @@
 
 
 ## TODO
-- [*] DDP
+- [x] DDP
 - [ ] More Backbones
 - [ ] Metrics
 
