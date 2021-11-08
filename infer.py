@@ -114,12 +114,12 @@ def test():
     for i, batch in enumerate(test_loader):
         
         img = batch.cuda()
-        if hp.resize:
-            img = face_pool(img)
+
         outputs = model(img)
 
         predicts = class_generate.generate_from_synthesis(outputs,None,randomize_noise=False,return_latents=True)
-
+        if hp.resize:
+            predicts = face_pool(predicts)
         if hp.dataset_type == 'car':
             predicts = predicts[:, :, 32:224, :]
 
