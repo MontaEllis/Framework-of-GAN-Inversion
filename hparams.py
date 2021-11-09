@@ -4,7 +4,7 @@ class hparams:
     description = 'PyTorch Training'
     output_dir = 'log/0831'
 
-    img_size = 256
+    img_size = 1024
     resize = True
     dataset_type = 'ffhq' # ['ffhq', 'celebahq', 'car', 'bggn']
     dataset_path = ''
@@ -22,6 +22,12 @@ class hparams:
 
     init_lr = 0.001
 
+    # loss
+    loss_lambda_mse = 1
+    loss_lambda_lpips = 0.8
+    loss_lambda_id = 0.1
+
+    
     arc_model_path = ''
     moco_model_path = ''
     weight_path_pytorch = ''

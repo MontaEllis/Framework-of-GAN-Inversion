@@ -37,6 +37,6 @@ class Base_Loss(nn.Module):
         else:
             loss_per = self.id_loss(predict_images,gt,gt)[0]
 
-        loss_all = loss_mse + loss_lpips + loss_per
+        loss_all = hp.loss_lambda_mse*loss_mse + hp.loss_lambda_lpips*loss_lpips + hp.loss_lambda_id*loss_per
 
         return loss_all,loss_mse,loss_lpips,loss_per
