@@ -12,13 +12,14 @@ from torch.autograd import Variable
 import torch.autograd as autograd
 from hparams import hparams as hp
 from criteria import id_loss, moco_loss
+from criteria.lpips.lpips import LPIPS
 
 class Base_Loss(nn.Module):
     def __init__(self):
         super(Base_Loss,self).__init__()
         import lpips
         # self.loss_fn_alex = lpips.LPIPS(net='alex') # best forward scores
-        self.loss_fn_vgg = lpips.LPIPS(net='vgg').cuda()
+        self.loss_fn_vgg = LPIPS(net_type='alex').cuda().eval()
 
         self.id_loss = id_loss.IDLoss().cuda().eval()
         self.moco_loss = moco_loss.MocoLoss()
@@ -30,7 +31,7 @@ class Base_Loss(nn.Module):
     def forward(self, gt,predict_images):
             
         loss_mse = self.criterion_mse(gt, predict_images)
-        loss_lpips = self.loss_fn_vgg(gt,predict_images)[0][0][0][0]
+        loss_lpips = self.loss_fn_vgg(gt,predict_images)
 
         if hp.dataset_type == 'car':
             loss_per = self.moco_loss(predict_images,gt,gt)[0]
