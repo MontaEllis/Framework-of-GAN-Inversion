@@ -21,8 +21,11 @@ class Base_Loss(nn.Module):
         # self.loss_fn_alex = lpips.LPIPS(net='alex') # best forward scores
         self.loss_fn_vgg = LPIPS(net_type='alex').cuda().eval()
 
-        self.id_loss = id_loss.IDLoss().cuda().eval()
-        self.moco_loss = moco_loss.MocoLoss()
+        if hp.dataset_type == 'car':
+            self.moco_loss = moco_loss.MocoLoss()
+        else:
+            self.id_loss = id_loss.IDLoss().cuda().eval()
+        
 
 
         self.criterion_mse = nn.MSELoss()
