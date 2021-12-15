@@ -30,6 +30,7 @@ class hparams:
     
     arc_model_path = ''
     moco_model_path = ''
+    circular_face_model_paths = ''
     weight_path_pytorch = ''
     if dataset_type == 'car':
         transform = car_transforms.get_transforms()
