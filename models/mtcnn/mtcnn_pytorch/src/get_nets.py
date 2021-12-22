@@ -3,11 +3,10 @@ import torch.nn as nn
 import torch.nn.functional as F
 from collections import OrderedDict
 import numpy as np
-
-from configs.paths_config import model_paths
-PNET_PATH = model_paths["mtcnn_pnet"]
-ONET_PATH = model_paths["mtcnn_onet"]
-RNET_PATH = model_paths["mtcnn_rnet"]
+from hparams import hparams as hp
+PNET_PATH = hp.mtcnn_path_pnet
+ONET_PATH = hp.mtcnn_path_onet
+RNET_PATH = hp.mtcnn_path_rnet
 
 
 class Flatten(nn.Module):

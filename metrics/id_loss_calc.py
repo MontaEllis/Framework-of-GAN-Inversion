@@ -10,14 +10,14 @@ import multiprocessing as mp
 import math
 import torch
 import torchvision.transforms as trans
-
+os.environ['CUDA_VISIBLE_DEVICES'] = '3'
 sys.path.append(".")
 sys.path.append("..")
 
 from models.mtcnn.mtcnn import MTCNN
 from models.model_irse import IR_101
 from hparams import hparams as hp
-CIRCULAR_FACE_PATH = hp.circular_face_model_paths['circular_face']
+CIRCULAR_FACE_PATH = hp.circular_face_model_paths
 
 
 def chunks(lst, n):
@@ -82,9 +82,11 @@ def run(args):
 	file_paths = []
 	for f in os.listdir(args.data_path):
 		image_path = os.path.join(args.data_path, f)
-		gt_path = os.path.join(args.gt_path, f)
-		if f.endswith(".jpg") or f.endswith('.png'):
-			file_paths.append([image_path, gt_path.replace('.png','.jpg')])
+		f_ = f.replace('predict','origin')
+		gt_path = os.path.join(args.gt_path, f_)
+
+		# if f.endswith(".jpg") or f.endswith('.png'):
+		file_paths.append([image_path, gt_path])
 
 	file_chunks = list(chunks(file_paths, int(math.ceil(len(file_paths) / args.num_threads))))
 	pool = mp.Pool(args.num_threads)

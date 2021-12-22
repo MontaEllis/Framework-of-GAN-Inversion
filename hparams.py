@@ -32,6 +32,11 @@ class hparams:
     moco_model_path = ''
     circular_face_model_paths = ''
     weight_path_pytorch = ''
+
+    mtcnn_path_pnet = ''
+    mtcnn_path_rnet = ''
+    mtcnn_path_onet = ''
+
     if dataset_type == 'car':
         transform = car_transforms.get_transforms()
     else:

@@ -15,6 +15,7 @@ sys.path.append("..")
 from criteria.lpips.lpips import LPIPS
 from data_function import GTResDataset
 
+from piqa import PSNR, TV, SSIM, MS_SSIM, GMSD, MS_GMSD, MDSI, HaarPSI, VSI, FSIM 
 
 def parse_args():
 	parser = ArgumentParser(add_help=False)
@@ -48,6 +49,26 @@ def run(args):
 		loss_func = LPIPS(net_type='alex')
 	elif args.mode == 'l2':
 		loss_func = torch.nn.MSELoss()
+	elif args.mode == 'psnr':
+		loss_func = PSNR()
+	elif args.mode == 'tv':
+		loss_func = TV()
+	elif args.mode == 'ssim':
+		loss_func = SSIM()
+	elif args.mode == 'ms_ssim':
+		loss_func = MS_SSIM()
+	elif args.mode == 'gmsd':
+		loss_func = GMSD()
+	elif args.mode == 'ms_gmsd':
+		loss_func = MS_GMSD()
+	elif args.mode == 'mdsi':
+		loss_func = MDSI()
+	elif args.mode == 'haarpsi':
+		loss_func = HaarPSI()
+	elif args.mode == 'vsi':
+		loss_func = VSI()
+	elif args.mode == 'fsim':
+		loss_func = FSIM()	
 	else:
 		raise Exception('Not a valid mode!')
 	loss_func.cuda()
