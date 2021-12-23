@@ -19,7 +19,7 @@ from piqa import PSNR, TV, SSIM, MS_SSIM, GMSD, MS_GMSD, MDSI, HaarPSI, VSI, FSI
 
 def parse_args():
 	parser = ArgumentParser(add_help=False)
-	parser.add_argument('--mode', type=str, default='lpips', choices=['lpips', 'l2'])
+	parser.add_argument('--mode', type=str, default='lpips', choices=['lpips', 'l2', 'psnr', 'tv', 'ssim', 'ms_ssim', 'gmsd', 'ms_gmsd', 'mdsi', 'haarpsi', 'vsi', 'fsim'])
 	parser.add_argument('--data_path', type=str, default='results')
 	parser.add_argument('--gt_path', type=str, default='gt_images')
 	parser.add_argument('--workers', type=int, default=4)
