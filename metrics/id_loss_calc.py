@@ -104,17 +104,17 @@ def run(args):
 	result_str = 'New Average score is {:.2f}+-{:.2f}'.format(mean, std)
 	print(result_str)
 
-	out_path = os.path.join(os.path.dirname(args.data_path), 'inference_metrics')
-	if not os.path.exists(out_path):
-		os.makedirs(out_path)
+	# out_path = os.path.join(os.path.dirname(args.data_path), 'inference_metrics')
+	# if not os.path.exists(out_path):
+	# 	os.makedirs(out_path)
 
-	with open(os.path.join(out_path, 'stat_id.txt'), 'w') as f:
-		f.write(result_str)
-	with open(os.path.join(out_path, 'scores_id.json'), 'w') as f:
-		json.dump(scores_dict, f)
+	# with open(os.path.join(out_path, 'stat_id.txt'), 'w') as f:
+	# 	f.write(result_str)
+	# with open(os.path.join(out_path, 'scores_id.json'), 'w') as f:
+	# 	json.dump(scores_dict, f)
 
-	toc = time.time()
-	print('Mischief managed in {}s'.format(toc - tic))
+	# toc = time.time()
+	# print('Mischief managed in {}s'.format(toc - tic))
 
 
 if __name__ == '__main__':

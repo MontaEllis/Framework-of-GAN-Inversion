@@ -91,14 +91,14 @@ def run(args):
 	print('Finished with ', args.data_path)
 	print(result_str)
 
-	out_path = os.path.join(os.path.dirname(args.data_path), 'inference_metrics')
-	if not os.path.exists(out_path):
-		os.makedirs(out_path)
+	# out_path = os.path.join(os.path.dirname(args.data_path), 'inference_metrics')
+	# if not os.path.exists(out_path):
+	# 	os.makedirs(out_path)
 
-	with open(os.path.join(out_path, 'stat_{}.txt'.format(args.mode)), 'w') as f:
-		f.write(result_str)
-	with open(os.path.join(out_path, 'scores_{}.json'.format(args.mode)), 'w') as f:
-		json.dump(scores_dict, f)
+	# with open(os.path.join(out_path, 'stat_{}.txt'.format(args.mode)), 'w') as f:
+	# 	f.write(result_str)
+	# with open(os.path.join(out_path, 'scores_{}.json'.format(args.mode)), 'w') as f:
+	# 	json.dump(scores_dict, f)
 
 
 if __name__ == '__main__':
