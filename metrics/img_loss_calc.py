@@ -19,7 +19,7 @@ from piqa import PSNR, TV, SSIM, MS_SSIM, GMSD, MS_GMSD, MDSI, HaarPSI, VSI, FSI
 
 def parse_args():
 	parser = ArgumentParser(add_help=False)
-	parser.add_argument('--mode', type=str, default='lpips', choices=['lpips', 'l2', 'psnr', 'tv', 'ssim', 'ms_ssim', 'gmsd', 'ms_gmsd', 'mdsi', 'haarpsi', 'vsi', 'fsim'])
+	parser.add_argument('--mode', type=str, default='ms_ssim', choices=['lpips', 'l2', 'psnr', 'tv', 'ssim', 'ms_ssim', 'gmsd', 'ms_gmsd', 'mdsi', 'haarpsi', 'vsi', 'fsim'])
 	parser.add_argument('--data_path', type=str, default='results')
 	parser.add_argument('--gt_path', type=str, default='gt_images')
 	parser.add_argument('--workers', type=int, default=4)
@@ -30,9 +30,15 @@ def parse_args():
 
 def run(args):
 
-	transform = transforms.Compose([transforms.Resize((256, 256)),
-									transforms.ToTensor(),
-									transforms.Normalize([0.5, 0.5, 0.5], [0.5, 0.5, 0.5])])
+
+
+	if args.mode == 'lpips' or args.mode == 'l2':
+		transform = transforms.Compose([transforms.Resize((256, 256)),
+										transforms.ToTensor(),
+										transforms.Normalize([0.5, 0.5, 0.5], [0.5, 0.5, 0.5])])
+	else:
+		transform = transforms.Compose([transforms.Resize((256, 256)),
+										transforms.ToTensor()])		
 
 	print('Loading dataset')
 	dataset = GTResDataset(root_path=args.data_path,
@@ -77,17 +83,27 @@ def run(args):
 	scores_dict = {}
 	all_scores = []
 	for result_batch, gt_batch in tqdm(dataloader):
+		# print(result_batch)
+		# print(gt_batch)
 		for i in range(args.batch_size):
-			loss = float(loss_func(result_batch[i:i+1].cuda(), gt_batch[i:i+1].cuda()))
+			if args.mode == 'lpips' or args.mode == 'l2':
+				loss = float(loss_func(result_batch[i:i+1].cuda(), gt_batch[i:i+1].cuda()))
+			else:
+				loss = loss_func(result_batch.cuda(),gt_batch.cuda())
+
 			all_scores.append(loss)
 			im_path = dataset.pairs[global_i][0]
-			scores_dict[os.path.basename(im_path)] = loss
+			if args.mode == 'lpips' or args.mode == 'l2':
+				scores_dict[os.path.basename(im_path)] = loss
+			else:
+				scores_dict[os.path.basename(im_path)] = loss.cpu()
 			global_i += 1
 
 	all_scores = list(scores_dict.values())
+	 
 	mean = np.mean(all_scores)
 	std = np.std(all_scores)
-	result_str = 'Average loss is {:.2f}+-{:.2f}'.format(mean, std)
+	result_str = 'Average loss is {:.4f}+-{:.4f}'.format(mean, std)
 	print('Finished with ', args.data_path)
 	print(result_str)
 
