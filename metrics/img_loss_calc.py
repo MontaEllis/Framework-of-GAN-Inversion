@@ -98,7 +98,11 @@ def run(args):
 			else:
 				scores_dict[os.path.basename(im_path)] = loss.cpu()
 			global_i += 1
-
+			
+			if args.mode == 'lpips' or args.mode == 'l2':
+				continue
+			else:
+				break
 	all_scores = list(scores_dict.values())
 	 
 	mean = np.mean(all_scores)
